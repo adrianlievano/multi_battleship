@@ -1,11 +1,11 @@
 import numpy
 
 class Board:
-  def __init__(self, xsize = 10, ysize = 10):
+  def __init__(self, x_size = 10, y_size = 10):
     """Creates board where battleships will fight"""
-    self.xsize = xsize
-    self.ysize = ysize
-    self.grid_arr = [[i * j for i in range(1,self.xsize + 1)] for j in range(1, self.ysize + 1)]
+    self.x_size = x_size
+    self.y_size = y_size
+    self.grid_arr = [[i * j for i in range(1,self.x_size + 1)] for j in range(1, self.y_size + 1)]
     print(np.shape(self.grid_arr))
   
   def show_board(self):
@@ -13,7 +13,7 @@ class Board:
 
 
 class Battleship(Board):
-  def __init__(self, start_row = 5, start_col = 2, xsize = 1, length = 5, width = 0, orientation = 'x'):
+  def __init__(self, start_row = 5, start_col = 2, x_size = 1, length = 5, width = 0, orientation = 'x'):
     """Creates a battleship object with x and y size. Inherits from Board class."""
     Board.__init__(self)
 
@@ -28,7 +28,7 @@ class Battleship(Board):
 
     if self.orientation == 'x':
       print(self.grid_arr[self.start_row - 1:self.start_row+width][:1][0][self.start_col - 1:length + 1])
-      self.ship_vals = self.grid_arr[self.start_row - 1:self.start_row+width][:1][0][self.start_col - 1:length + 1]                                                                                                                  )
+      self.ship_vals = self.grid_arr[self.start_row - 1:self.start_row+width][:1][0][self.start_col - 1:length + 1]
     else:
       ##handles logic if the player decides to play the battleship in another orientation.
       pass                            
