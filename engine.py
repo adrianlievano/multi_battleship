@@ -1,4 +1,4 @@
-import numpy
+import numpy as np
 
 class Board:
   def __init__(self, x_size = 10, y_size = 10):
@@ -28,15 +28,11 @@ class Battleship:
     self.orientation = orientation
 
     #Health of the ship is total area of indices the ship occupies. 
-    self.health = length*width  
+    self.health = length + length*width 
     print('Ship starts at row {} column {}.'.format(self.start_row, self.start_col))
 
-    if self.orientation == 'x':
-      print(board.grid_arr[self.start_row - 1:self.start_row+width][:1][0][self.start_col - 1:length + 1])
-      self.ship_vals = board.grid_arr[self.start_row - 1:self.start_row+width][:1][0][self.start_col - 1:length + 1]
-    else:
-      ##handles logic if the player decides to play the battleship in another orientation.
-      pass                            
+    board.grid_arr[self.start_row - 1][self.start_col - 1:] = [0 for i in board.grid_arr[self.start_row - 1][self.start_col - 1:]]
+    self.ship_vals = board.grid_arr[self.start_row - 1][self.start_col - 1:]                        
 
   def shoot(self, target_board, target_battleship):
     """Shoots a missile at the enemy battleship on an enemy grid."""
@@ -54,16 +50,12 @@ class Battleship:
     ## check if the battleship is at the index
     val = target_grid[row_input - 1][col_input - 1]
 
-    #Marks the location on the board object as hit!
-    if target_grid[row_input - 1][col_input - 1] != -1:
-      target_grid[row_input - 1][col_input - 1] = -1
-    else:
-      print('Already hit this spot!')
 
-    ##print life of the battleship
-    if target_grid[row_input - 1][col_input - 1] in target_battleship.ship_vals:
+    if val == 0:
       print('KABOOM! Direct hit. YAR!')
       target_battleship.health -= 1 
+      val = -1
+      target_grid[row_input - 1][col_input - 1] = val
 
       if target_battleship.health == 4:
         print('keep shooting! We found them!')
@@ -73,8 +65,10 @@ class Battleship:
         print('Turned to Rubble!')
       else:
         pass
+    elif val == -1:
+      print('Already hit this spot!')
     else:
-        target_grid[row_input - 1][col_input - 1] = -1
+        val = -1
         print('Yar! Reload you lazy bums! We missed!')
 
     target_board.grid_arr = target_grid
@@ -82,12 +76,14 @@ class Battleship:
     #Returns an updated state on the target_board and target_battleship
     return target_board, target_battleship
 
-  def healthbar(self): 
+  def show_health(self): 
     """Prints the status of the battleship health."""
     print(self.health)
 
-  def place(self, start_row = 5, start_col = 2, length = 5, width = 0):
-    """Passes a battleship within the game grid."""
+  def place(self, board):
+    """Places a battleship object on a game board.
+        board = A board class object.
+    """
     print(self.grid_arr)
 
   def show_location(self):
